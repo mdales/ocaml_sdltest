@@ -12,19 +12,24 @@ let init (width : int) (height : int) (title : string) =
 let boot r = 
   Sdl.render_clear r >>= fun () ->
   Sdl.set_render_draw_color r 240 240 240 255 >>= fun () ->
-  let rect = Sdl.Rect.create ~x:0 ~y:0 ~w:512 ~h:384 in
-  Sdl.render_fill_rect r (Some rect) >|= fun() ->
+  Sdl.render_fill_rect r None >|= fun() ->
   Sdl.render_present r
 
 let tick t r =
   Sdl.render_clear r >>= fun () ->
 
   Sdl.set_render_draw_color r 240 240 240 255 >>= fun () ->
-  let fullrect = Sdl.Rect.create ~x:0 ~y:0 ~w:512 ~h:384 in
-  Sdl.render_fill_rect r (Some fullrect) >>= fun() ->
+  Sdl.render_fill_rect r None >>= fun() ->
+
+  let progress = (t / 10) mod 312 in
+  Sdl.set_render_draw_color r 128 128 128 255 >>= fun () ->
+  let inner = Sdl.Rect.create ~x:100 ~y:182 ~w:progress ~h:20 in
+  Sdl.render_fill_rect r (Some inner) >>= fun() ->
 
   Sdl.set_render_draw_color r 20 20 20 255 >>= fun () ->
-  Sdl.render_draw_line r (t mod 512) 10 100 100 >|= fun() ->
+  Sdl.render_draw_line r (100 + progress) 182 (100 + progress) 202 >>= fun() ->
+  let outer = Sdl.Rect.create ~x:100 ~y:182 ~w:312 ~h:20 in
+  Sdl.render_draw_rect r (Some outer) >|= fun() ->
     
   Sdl.render_present r
 
