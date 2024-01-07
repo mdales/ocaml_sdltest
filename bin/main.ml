@@ -22,12 +22,12 @@ let tick t r =
   Sdl.render_fill_rect r None >>= fun() ->
 
   let progress = (t / 10) mod 312 in
-  Sdl.set_render_draw_color r 128 128 128 255 >>= fun () ->
+  Sdl.set_render_draw_color r 128 128 255 255 >>= fun () ->
   let inner = Sdl.Rect.create ~x:100 ~y:182 ~w:progress ~h:20 in
   Sdl.render_fill_rect r (Some inner) >>= fun() ->
 
   Sdl.set_render_draw_color r 20 20 20 255 >>= fun () ->
-  Sdl.render_draw_line r (100 + progress) 182 (100 + progress) 202 >>= fun() ->
+  (* Sdl.render_draw_line r (100 + progress) 182 (100 + progress) 202 >>= fun() -> *)
   let outer = Sdl.Rect.create ~x:100 ~y:182 ~w:312 ~h:20 in
   Sdl.render_draw_rect r (Some outer) >|= fun() ->
     
