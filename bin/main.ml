@@ -34,7 +34,7 @@ let tick t r =
   Sdl.render_present r
 
 let () = 
-  match init 512 384 "SDL Test" with
+  match init 512 384 "SDL2 Progress" with
   | Error (`Msg e) -> Sdl.log "Init error: %s" e; exit 1
   | Ok (w, r) ->
     match boot r with 
