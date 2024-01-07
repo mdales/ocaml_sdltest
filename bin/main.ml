@@ -15,21 +15,46 @@ let boot r =
   Sdl.render_fill_rect r None >|= fun() ->
   Sdl.render_present r
 
-let tick t r =
-  Sdl.render_clear r >>= fun () ->
-
-  Sdl.set_render_draw_color r 240 240 240 255 >>= fun () ->
-  Sdl.render_fill_rect r None >>= fun() ->
-
+let tick1 t r = 
   let progress = (t / 10) mod 312 in
   Sdl.set_render_draw_color r 128 128 255 255 >>= fun () ->
   let inner = Sdl.Rect.create ~x:100 ~y:182 ~w:progress ~h:20 in
   Sdl.render_fill_rect r (Some inner) >>= fun() ->
 
   Sdl.set_render_draw_color r 20 20 20 255 >>= fun () ->
-  (* Sdl.render_draw_line r (100 + progress) 182 (100 + progress) 202 >>= fun() -> *)
   let outer = Sdl.Rect.create ~x:100 ~y:182 ~w:312 ~h:20 in
-  Sdl.render_draw_rect r (Some outer) >|= fun() ->
+  Sdl.render_draw_rect r (Some outer) 
+
+let tick2 t r = 
+  let t2 = t - (312 * 10) in
+
+  Sdl.set_render_draw_color r 128 128 255 255 >>= fun () ->
+  let inner = Sdl.Rect.create ~x:100 ~y:182 ~w:312 ~h:20 in
+  Sdl.render_fill_rect r (Some inner) >>= fun() ->
+
+  let drip = Sdl.Rect.create ~x:411 ~y:202 ~w:1 ~h:182 in
+  Sdl.render_fill_rect r (Some drip) >>= fun() ->
+
+  let height = min (t2 / 4) 384 in
+  let level = Sdl.Rect.create ~x:0 ~y:(384 - height) ~w:512 ~h:height in
+  Sdl.render_fill_rect r (Some level) >>= fun() ->
+
+  Sdl.set_render_draw_color r 20 20 20 255 >>= fun () ->
+  let outer = Sdl.Rect.create ~x:100 ~y:182 ~w:312 ~h:20 in
+  Sdl.render_draw_rect r (Some outer) 
+
+let tick t r =
+  Sdl.render_clear r >>= fun () ->
+
+  Sdl.set_render_draw_color r 240 240 240 255 >>= fun () ->
+  Sdl.render_fill_rect r None >>= fun() ->
+
+  let innert = t mod ((312 * 10) + (384 * 4)) in
+
+  (if innert < (312 * 10) then 
+    tick1 innert r 
+  else 
+    tick2 innert r) >|= fun () ->
     
   Sdl.render_present r
 
