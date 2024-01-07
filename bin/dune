@@ -1,0 +1,4 @@
+(executable
+ (public_name sdltest)
+ (name main)
+ (libraries sdltest tsdl))
